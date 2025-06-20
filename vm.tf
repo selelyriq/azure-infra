@@ -24,3 +24,12 @@ resource "azurerm_virtual_machine" "vm" {
     disable_password_authentication = false
   }
 }
+
+resource "azurerm_virtual_machine_extension" "vm_nw_agent" {
+  name                 = "NetworkWatcherAgent"
+  virtual_machine_id   = azurerm_virtual_machine.vm.id
+  publisher            = "Microsoft.Azure.NetworkWatcher"
+  type                 = "NetworkWatcherAgentLinux"
+  type_handler_version = "1.4"
+  auto_upgrade_minor_version = true
+}

@@ -39,6 +39,17 @@ resource "azurerm_lb_probe" "probe" {
   port            = 8080
 }
 
+resource "azurerm_lb_rule" "lb_rule" {
+  loadbalancer_id                = azurerm_lb.lb.id
+  name                           = "http-rule"
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 8080
+  frontend_ip_configuration_name = "PublicIPAddress"
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.backend_address_pool.id]
+  probe_id                       = azurerm_lb_probe.probe.id
+}
+
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "vmss-terraform"
   resource_group_name = azurerm_resource_group.rg.name
@@ -68,9 +79,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     name    = "terraform-network-interface"
     primary = true
     ip_configuration {
-      name      = "internal"
-      primary   = true
-      subnet_id = azurerm_subnet.subnet_1.id
+      name                                   = "internal"
+      primary                                = true
+      subnet_id                              = azurerm_subnet.subnet_1.id
+      load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_address_pool.id]
     }
   }
 }

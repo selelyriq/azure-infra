@@ -10,12 +10,12 @@ resource "azurerm_network_connection_monitor" "cm" {
   location           = azurerm_network_watcher.nw.location
 
   endpoint {
-    name = "hub-vm"
-    target_resource_id = azurerm_linux_virtual_machine.hub_test_vm.id
+    name               = "database"
+    target_resource_id = azurerm_private_endpoint.my_terraform_private_endpoint.private_service_connection.0.private_ip_address
   }
 
   endpoint {
-    name = "spoke-vm"
+    name    = "spoke-vm"
     address = azurerm_network_interface.nic.private_ip_address
   }
 
@@ -23,7 +23,7 @@ resource "azurerm_network_connection_monitor" "cm" {
     name     = "icmp-test"
     protocol = "Icmp"
     icmp_configuration {
-      
+
     }
   }
 

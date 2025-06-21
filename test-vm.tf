@@ -40,10 +40,10 @@ resource "azurerm_linux_virtual_machine" "hub_test_vm" {
 }
 
 resource "azurerm_virtual_machine_extension" "hub_test_vm_nw_agent" {
-  name                 = "NetworkWatcherAgent"
-  virtual_machine_id   = azurerm_linux_virtual_machine.hub_test_vm.id
-  publisher            = "Microsoft.Azure.NetworkWatcher"
-  type                 = "NetworkWatcherAgentLinux"
-  type_handler_version = "1.4"
+  name                       = "NetworkWatcherAgent"
+  virtual_machine_id         = azurerm_linux_virtual_machine.hub_test_vm.id
+  publisher                  = "Microsoft.Azure.NetworkWatcher"
+  type                       = "NetworkWatcherAgentLinux"
+  type_handler_version       = "1.4"
   auto_upgrade_minor_version = true
 } 

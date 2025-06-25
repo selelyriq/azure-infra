@@ -1,12 +1,7 @@
-resource "azurerm_resource_group" "rg_db" {
-  name     = "rg-terraform-db"
-  location = "eastus2"
-}
-
 resource "azurerm_mssql_server" "mssql_server" {
   name                         = "mssql-terraform"
-  location                     = azurerm_resource_group.rg_db.location
-  resource_group_name          = azurerm_resource_group.rg_db.name
+  location                     = azurerm_resource_group.rg.location
+  resource_group_name          = azurerm_resource_group.rg.name
   administrator_login          = "adminuser"
   administrator_login_password = "Password1234!"
   version                      = "12.0"
@@ -25,8 +20,8 @@ resource "azurerm_mssql_database" "mssql_database" {
 #Create private endpoint for SQL Server
 resource "azurerm_private_endpoint" "my_terraform_private_endpoint" {
   name                = "private-endpoint-sql1"
-  location            = azurerm_resource_group.rg_db.location
-  resource_group_name = azurerm_resource_group.rg_db.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   subnet_id           = azurerm_subnet.subnet_db.id
 
   private_service_connection {

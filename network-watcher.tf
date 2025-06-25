@@ -1,13 +1,12 @@
-resource "azurerm_network_watcher" "nw" {
-  name                = "nw-${azurerm_resource_group.rg.location}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+data "azurerm_network_watcher" "nw" {
+  name                = "NetworkWatcher_${azurerm_resource_group.rg.location}"
+  resource_group_name = "NetworkWatcherRG"
 }
 
 resource "azurerm_network_connection_monitor" "cm" {
   name               = "cm-peering-test"
-  network_watcher_id = azurerm_network_watcher.nw.id
-  location           = azurerm_network_watcher.nw.location
+  network_watcher_id = data.azurerm_network_watcher.nw.id
+  location           = data.azurerm_network_watcher.nw.location
 
   endpoint {
     name               = "database"
@@ -35,7 +34,7 @@ resource "azurerm_network_connection_monitor" "cm" {
   }
 
   depends_on = [
-    azurerm_virtual_machine_extension.hub_test_vm_nw_agent,
+    azurerm_mssql_server.mssql_server,
     azurerm_virtual_machine_extension.vm_nw_agent,
   ]
 }

@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "rg" {
   name     = "rg-terraform-vnet"
-  location = "eastus"
+  location = "eastus2"
 }
 
 ###
@@ -85,21 +85,21 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg" {
 resource "azurerm_virtual_network" "db_vnet" {
   name                = "vnet-terraform-db"
   address_space       = ["10.3.0.0/16"]
-  location            = azurerm_resource_group.rg_db.location
-  resource_group_name = azurerm_resource_group.rg_db.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_subnet" "subnet_db" {
   name                 = "subnet-db"
-  resource_group_name  = azurerm_resource_group.rg_db.name
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.db_vnet.name
   address_prefixes     = ["10.3.0.0/24"]
 }
 
 resource "azurerm_network_interface" "nic_db" {
   name                = "nic-terraform-db"
-  location            = azurerm_resource_group.rg_db.location
-  resource_group_name = azurerm_resource_group.rg_db.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   ip_configuration {
     name                          = "ip-config"
     subnet_id                     = azurerm_subnet.subnet_db.id
